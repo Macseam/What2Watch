@@ -1,6 +1,12 @@
 let webpack = require('webpack');
 let path = require('path');
 
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const extractLess = new ExtractTextPlugin({
+  filename: "[name].[contenthash].css",
+  disable: true /*process.env.NODE_ENV === "development"*/
+});
+
 const NODE_ENV = process.env.NODE_ENV || 'production';
 
 module.exports = {
@@ -69,18 +75,22 @@ module.exports = {
       ],
     }, {
       test: /\.css$/,
-      use: [
-        {
-          loader: 'style-loader'
-        },
-      ],
+      loader: extractLess.extract({
+        use: [{
+          loader: "css-loader"
+        }],
+        fallback: "style-loader"
+      })
     }, {
       test: /\.less$/,
-      use: [
-        {
-          loader: 'style-loader'
-        },
-      ],
+      loader: extractLess.extract({
+        use: [{
+          loader: "css-loader"
+        }, {
+          loader: "less-loader"
+        }],
+        fallback: "style-loader"
+      })
     }, {
       test: /\.woff$/,
       use: [
@@ -157,6 +167,7 @@ module.exports = {
   },
 
   plugins: NODE_ENV === 'development' ? [
+    extractLess,
     new webpack.optimize.CommonsChunkPlugin({
       name: "vendors",
       children: true,
@@ -169,6 +180,7 @@ module.exports = {
       NODE_ENV: JSON.stringify(NODE_ENV)
     }),
   ] : [
+    extractLess,
     new webpack.optimize.CommonsChunkPlugin({
       name: "vendors",
       children: true,
