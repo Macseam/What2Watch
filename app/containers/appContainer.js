@@ -3,51 +3,94 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { bindActionCreators } from 'redux';
+import * as mainActions from '../actions/mainActions';
+
+import CardComponent from '../components/CardComponent';
+
 class AppContainer extends Component {
 
   constructor(props) {
     super(props);
+
+    this.actions = props.mainActions;
+
+    this.state = {
+      currentStep: this.props.mainState.currentStep
+    };
+
   }
 
-  componentDidMount() {
-    console.log('main container mounted');
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      currentStep: nextProps.mainState.currentStep
+    });
   }
 
-  cardFlipped(event) {
+  cardFlipped(value, event) {
     if (event
       && event.currentTarget
       && event.currentTarget.className) {
-      if (event.currentTarget.className.indexOf('flipped') === -1) {
-        event.currentTarget.className = 'card flipped';
-      }
-      else {
-        event.currentTarget.className = 'card';
-      }
+      event.currentTarget.className = 'card flipped';
+      setTimeout(()=>{
+        this.actions.setGenre(value);
+        this.actions.setNextStep();
+      },500);
     }
   }
 
   render() {
 
+    const {
+      currentStep
+    } = this.state;
+
     return (
-      <div>
-        <div className="card" onClick={this.cardFlipped.bind(this)}>
-          <div className="card-face">
-            <div className="card-face__corner top-right">&nbsp;</div>
-            <div className="card-face__corner top-left">&nbsp;</div>
-            <div className="card-face__corner bottom-right">&nbsp;</div>
-            <div className="card-face__corner bottom-left">&nbsp;</div>
-            <div className="card-face__center">
-              <div className="comedy-icon">&nbsp;</div>
-            </div>
-            <div className="card-face__title">
-              Посмеяться
-            </div>
-          </div>
-          <div className="card-back">&nbsp;</div>
+      <div className="app-container">
+
+        <div className="card-holder">
+          <div className="shelf">&nbsp;</div>
+
+          {currentStep === 1 &&
+            <CardComponent
+              cardAction={this.cardFlipped.bind(this, "comedy")}
+              cardTitle="Комедия"
+              cardType="genre"
+              cardValue="comedy"
+            />
+          }
+
+          {currentStep === 1 &&
+            <CardComponent
+              cardAction={this.cardFlipped.bind(this, "drama")}
+              cardTitle="Драма"
+              cardType="genre"
+              cardValue="drama"
+            />
+          }
+
+          {currentStep === 1 &&
+            <CardComponent
+              cardAction={this.cardFlipped.bind(this, "action")}
+              cardTitle="Экшен"
+              cardType="genre"
+              cardValue="action"
+            />
+          }
+
         </div>
+
       </div>
     );
   }
 }
 
-export default connect(state => state)(AppContainer);
+function mapDispatchToProps(dispatch) {
+  return {
+    mainActions: bindActionCreators({
+      ...mainActions,
+    }, dispatch),
+  };
+}
+
+export default connect(state => state, mapDispatchToProps)(AppContainer);

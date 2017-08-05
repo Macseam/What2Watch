@@ -14,7 +14,9 @@ module.exports = {
   entry: {
     app: './app/app',
     vendors: [
+      'axios',
       'lodash',
+      'prop-types',
       'react',
       'react-redux',
       'react-router',

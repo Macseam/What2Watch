@@ -1,5 +1,6 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
+import thunk from 'redux-thunk';
 
 import rootReducer from './reducers';
 
@@ -23,8 +24,8 @@ const logger = createLogger({
 
 const enhancer = compose(
   NODE_ENV === 'development'
-    ? applyMiddleware(logger)
-    : applyMiddleware(logger)
+    ? applyMiddleware(thunk, logger)
+    : applyMiddleware(thunk)
 );
 
 export default function appStore(initialState) {

@@ -1,15 +1,106 @@
 @import url('https://fonts.googleapis.com/css?family=Pattaya');
 
+.keyframes(@name; @arguments) {
+  @-moz-keyframes @name { @arguments(); }
+  @-webkit-keyframes @name { @arguments(); }
+  @keyframes @name { @arguments(); }
+}
+
+.animation(@arguments) {
+  -webkit-animation: @arguments;
+  -moz-animation: @arguments;
+  animation: @arguments;
+}
+
 html, body {
+  width: 100%;
+  min-width: 360px;
+  height: 100%;
   background: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  height: 100%;
+}
+
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: transparent url('../images/movie_bg1.jpg') center center no-repeat;
+  background-size: cover;
+}
+
+.card-holder {
+  width: 100%;
+  height: 80%;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+}
+
+.shelf {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0 auto;
+  height: 71px;
+  background: transparent url('../images/board.png') center bottom no-repeat;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .card {
   cursor: pointer;
   position: relative;
-  display: block;
-  width: 230px;
-  height: 330px;
+  bottom: 20px;
+  display: inline-block;
+  vertical-align: text-top;
+  margin: 0 20px;
+  width: 180px;
+  height: 260px;
+  perspective: 1000px;
+  z-index: 10;
+  transition: bottom 0.5s ease;
+  .keyframes(card-appear;{
+    0% {
+      opacity: 0;
+      bottom: 60px;
+    }
+    100% {
+      opacity: 1;
+      bottom: 20px;
+    }
+  });
+  .animation(card-appear 1s ease 1);
+  &:hover {
+    bottom: 30px;
+    transition: bottom 0.5s ease;
+    &:after {
+      box-shadow: 0 14px 10px 0 rgba(0, 0, 0, 0.7);
+      transition: box-shadow 0.5s ease;
+    }
+  }
+  &:after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    bottom: 0;
+    box-shadow: 0 4px 8px 2px rgba(0, 0, 0, 0.7);
+    transition: box-shadow 0.5s ease;
+  }
   &.flipped {
     .card-face {
       transform: rotateY(180deg);
@@ -47,24 +138,39 @@ html, body {
     }
     &__center {
       position: absolute;
-      width: 100%;
+      left: 0;
+      right: 0;
+      width: 80%;
       height: 100%;
+      margin: 0 auto;
       background: transparent url('../images/circle-rays.gif') center center no-repeat;
-      .comedy-icon {
+      background-size: contain;
+      .genre {
         position: absolute;
         width: 100%;
         height: 100%;
+      }
+      .genre-comedy-icon {
         background: transparent url('../images/comedy-icon.gif') center center no-repeat;
+        .genre;
+      }
+      .genre-drama-icon {
+        background: transparent url('../images/drama-icon.gif') center center no-repeat;
+        .genre;
+      }
+      .genre-action-icon {
+        background: transparent url('../images/action-icon.gif') center center no-repeat;
+        .genre;
       }
     }
     &__title {
       cursor: default;
       font-family: 'Pattaya', cursive;
-      font-size: 20px;
+      font-size: 18px;
       position: absolute;
       width: 100%;
       text-align: center;
-      bottom: 8%;
+      bottom: 10%;
     }
   }
   &-back {
@@ -77,5 +183,23 @@ html, body {
     backface-visibility: hidden;
     transition: 0.6s;
     transform-style: preserve-3d;
+  }
+}
+
+@media (max-width:680px) {
+  .app-container {
+    padding: 40px 0;
+    height: auto;
+    min-height: 100%;
+  }
+  .card {
+    margin: 20px 20px;
+    bottom: 0;
+    &:after {
+      display: none;
+    }
+  }
+  .shelf {
+    display: none;
   }
 }
