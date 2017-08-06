@@ -28,13 +28,24 @@ class AppContainer extends Component {
   }
 
   cardFlipped(value, event) {
+    const visibleCards = document.getElementsByClassName('card');
     if (event
       && event.currentTarget
       && event.currentTarget.className) {
       event.currentTarget.className = 'card flipped';
       setTimeout(()=>{
-        this.actions.setGenre(value);
-        this.actions.setNextStep();
+        [].map.call(visibleCards, (cardElement)=>{
+          if (cardElement.className.indexOf('flipped') !== -1) {
+            cardElement.className = 'card flipped disappearing';
+          }
+          else {
+            cardElement.className = 'card disappearing';
+          }
+        });
+        setTimeout(()=>{
+          this.actions.setGenre(value);
+          this.actions.setNextStep();
+        }, 500)
       },500);
     }
   }
