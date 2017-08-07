@@ -63,31 +63,75 @@ class AppContainer extends Component {
           <div className="shelf">&nbsp;</div>
 
           {currentStep === 1 &&
+            <div>
+              <CardComponent
+                cardAction={this.cardFlipped.bind(this, "comedy")}
+                cardTitle="Комедия"
+                cardType="genre"
+                cardValue="comedy"
+              />
+              <CardComponent
+                cardAction={this.cardFlipped.bind(this, "drama")}
+                cardTitle="Драма"
+                cardType="genre"
+                cardValue="drama"
+              />
+              <CardComponent
+                cardAction={this.cardFlipped.bind(this, "action")}
+                cardTitle="Экшен"
+                cardType="genre"
+                cardValue="action"
+              />
+            </div>
+          }
+
+          {currentStep === 2 &&
+          <div>
             <CardComponent
               cardAction={this.cardFlipped.bind(this, "comedy")}
               cardTitle="Комедия"
               cardType="genre"
-              cardValue="comedy"
+              cardValue="drama"
             />
-          }
-
-          {currentStep === 1 &&
             <CardComponent
               cardAction={this.cardFlipped.bind(this, "drama")}
               cardTitle="Драма"
               cardType="genre"
-              cardValue="drama"
+              cardValue="action"
             />
-          }
-
-          {currentStep === 1 &&
             <CardComponent
               cardAction={this.cardFlipped.bind(this, "action")}
               cardTitle="Экшен"
               cardType="genre"
+              cardValue="comedy"
+            />
+          </div>
+          }
+
+          {currentStep === 3 &&
+          <div>
+            <CardComponent
+              cardAction={this.cardFlipped.bind(this, "comedy")}
+              cardTitle="Комедия"
+              cardType="genre"
+              cardValue="drama"
+            />
+            <CardComponent
+              cardAction={this.cardFlipped.bind(this, "drama")}
+              cardTitle="Драма"
+              cardType="genre"
               cardValue="action"
             />
+            <CardComponent
+              cardAction={this.cardFlipped.bind(this, "action")}
+              cardTitle="Экшен"
+              cardType="genre"
+              cardValue="comedy"
+            />
+          </div>
           }
+
+          <div className="no-choice">Любой жанр</div>
 
         </div>
 
