@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Pattaya');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
 
 .keyframes(@name; @arguments) {
   @-moz-keyframes @name { @arguments(); }
@@ -64,15 +65,28 @@ html, body {
 
 .no-choice {
   position: absolute;
-  width: 150px;
+  width: 110px;
   left: 0;
   right: 0;
   bottom: -68px;
-  background: white;
-  padding: 10px;
+  background: #00838f;
+  text-transform: uppercase;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 12px;
+  color: #ffffff;
   text-align: center;
+  padding: 10px;
+  cursor: pointer;
   margin: 0 auto;
   display: table;
+  border-radius: 10px;
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2);
+  border-top: 1px solid rgba(255,255,255,0.4);
+  transition: background 0.3s ease;
+  &:hover {
+    background: #0097a7;
+    transition: background 0.3s ease;
+  }
 }
 
 .card {
@@ -125,6 +139,7 @@ html, body {
     }
   }
   &.disappearing {
+    opacity: 0;
     .keyframes(card-disappear;{
       0% {
         opacity: 1;
@@ -171,26 +186,50 @@ html, body {
       margin: 0 auto;
       background: transparent url('../images/circle-rays.gif') center center no-repeat;
       background-size: contain;
-      .genre {
+      .card-type {
         position: absolute;
         width: 100%;
         height: 100%;
       }
       .genre-comedy-icon {
         background: transparent url('../images/comedy-icon.gif') center center no-repeat;
-        .genre;
+        .card-type;
       }
       .genre-drama-icon {
         background: transparent url('../images/drama-icon.gif') center center no-repeat;
-        .genre;
+        .card-type;
       }
       .genre-action-icon {
         background: transparent url('../images/action-icon.gif') center center no-repeat;
-        .genre;
+        .card-type;
+      }
+      .date-old-icon {
+        background: transparent url('../images/old-icon.gif') center center no-repeat;
+        .card-type;
+      }
+      .date-new-icon {
+        background: transparent url('../images/new-icon.gif') center center no-repeat;
+        .card-type;
+      }
+      .date-fresh-icon {
+        background: transparent url('../images/fresh-icon.gif') center center no-repeat;
+        .card-type;
+      }
+      .fame-unknown-icon {
+        background: transparent url('../images/unknown-icon.gif') center center no-repeat;
+        .card-type;
+      }
+      .fame-known-icon {
+        background: transparent url('../images/known-icon.gif') center center no-repeat;
+        .card-type;
+      }
+      .fame-popular-icon {
+        background: transparent url('../images/popular-icon.gif') center center no-repeat;
+        .card-type;
       }
     }
     &__title {
-      cursor: default;
+      cursor: pointer;
       font-family: 'Pattaya', cursive;
       font-size: 18px;
       position: absolute;
@@ -209,6 +248,75 @@ html, body {
     backface-visibility: hidden;
     transition: 0.6s;
     transform-style: preserve-3d;
+  }
+}
+
+.movie-card {
+  cursor: pointer;
+  position: relative;
+  bottom: 20px;
+  display: inline-block;
+  vertical-align: bottom;
+  border: 1px silver solid;
+  margin: 0 20px;
+  width: 180px;
+  height: 260px;
+  z-index: 10;
+  transition: bottom 0.5s ease;
+  .movie-title-wo-picture {
+    text-align: center;
+    padding: 10px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+    position: absolute;
+    bottom: 0;
+  }
+  &.no-picture {
+    background: transparent url('../images/wild_oliva.png');
+  }
+  &.empty {
+    border: 0;
+    &:after {
+      display: none;
+    }
+  }
+  .keyframes(card-appear;{
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  });
+  .animation(card-appear 1s ease 1);
+  &:hover {
+    bottom: 30px;
+    transition: bottom 0.5s ease;
+    &:after {
+      box-shadow: 0 14px 10px 0 rgba(0, 0, 0, 0.7);
+      transition: box-shadow 0.5s ease;
+    }
+  }
+  &:after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    bottom: 0;
+    box-shadow: 0 4px 8px 2px rgba(0, 0, 0, 0.7);
+    transition: box-shadow 0.5s ease;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
   }
 }
 
