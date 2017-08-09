@@ -19,6 +19,7 @@ class AppContainer extends Component {
 
     this.state = {
       currentStep: this.props.mainState.currentStep,
+      currentMovie: null,
       moviesList: {},
       randomMoviesList: {}
     };
@@ -136,8 +137,25 @@ class AppContainer extends Component {
     }, 500);
   }
 
-  movieCardClicked() {
-    console.log(123);
+  movieCardClicked(value, event) {
+    const visibleMovieCards = document.getElementsByClassName('movie-card');
+    [].map.call(visibleMovieCards, (cardElement)=>{
+      cardElement.className = 'movie-card inactive';
+    });
+    event.currentTarget.className = 'movie-card active';
+    this.setState({
+      currentMovie: value
+    });
+  }
+
+  resetCurrentMovie() {
+    const visibleMovieCards = document.getElementsByClassName('movie-card');
+    [].map.call(visibleMovieCards, (cardElement)=>{
+      cardElement.className = 'movie-card';
+    });
+    this.setState({
+      currentMovie: null
+    });
   }
 
   refreshRandomMovies() {
@@ -146,19 +164,70 @@ class AppContainer extends Component {
       randomPage = randomPage - 1;
     }
     this.actions.getRandomMovies({params: this.setParams(this.props), randomPage});
+    this.setState({
+      currentMovie: null
+    });
+  }
+
+  russianParams(paramName) {
+    switch (paramName) {
+      case 'comedy':
+        return 'комедия';
+      case 'drama':
+        return 'драма';
+      case 'action':
+        return 'экшен';
+      case 'old':
+        return 'старое';
+      case 'new':
+        return 'недавнее';
+      case 'fresh':
+        return 'новое';
+      case 'unknown':
+        return 'малознакомое';
+      case 'known':
+        return 'известное';
+      case 'popular':
+        return 'рейтинговое';
+      default:
+        return null;
+    }
   }
 
   render() {
 
     const {
       currentStep,
+      currentMovie,
       randomMoviesList
     } = this.state;
+
+    const searchParams = [];
+    if (this.props.mainState.genre) {
+      searchParams.push(this.props.mainState.genre);
+    }
+    if (this.props.mainState.date) {
+      searchParams.push(this.props.mainState.date);
+    }
+    if (this.props.mainState.fame) {
+      searchParams.push(this.props.mainState.fame);
+    }
 
     return (
       <div className="app-container">
 
         <div className="card-holder">
+
+          {!_.isEmpty(searchParams) &&
+            <div className="search-params">
+              {_.map(searchParams, (searchParamItem, index) => {
+                return (
+                  <li key={index}>{this.russianParams(searchParamItem)}</li>
+                );
+              })}
+            </div>
+          }
+
           <div className="shelf">&nbsp;</div>
 
           {currentStep === 1 &&
@@ -240,11 +309,18 @@ class AppContainer extends Component {
 
           {currentStep === 4 && !this.props.mainState.loading && !_.isEmpty(randomMoviesList) &&
           <div>
+            {!_.isEmpty(currentMovie) &&
+              <div className="movie-overview">
+                <div className="close-icon" onClick={this.resetCurrentMovie.bind(this)}>&#10005;</div>
+                <h3>{currentMovie.title || currentMovie.original_title || 'Название неизвестно'}</h3>
+                <p>{currentMovie.overview || 'Описания, к сожалению, нет.'}</p>
+              </div>
+            }
             {_.map(randomMoviesList.slice(0,3), (movieInfo, index)=>{
               return (
                 <MovieCardComponent
                   key={index}
-                  movieCardAction={this.movieCardClicked.bind(this)}
+                  movieCardAction={this.movieCardClicked.bind(this, movieInfo)}
                   movieCardInfo={movieInfo}
                 />
               );
