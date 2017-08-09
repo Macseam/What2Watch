@@ -18,9 +18,12 @@ module.exports = {
       'lodash',
       'prop-types',
       'react',
+      'react-dom',
       'react-redux',
-      'react-router',
-      'translit-rus-eng'
+      'react-router-dom',
+      'react-router-redux',
+      'redux',
+      'redux-thunk'
     ],
   },
 
