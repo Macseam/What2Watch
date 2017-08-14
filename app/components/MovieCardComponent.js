@@ -13,6 +13,7 @@ const MovieCardComponent = props => {
       }
       onClick={props.movieCardAction ? props.movieCardAction : null}
     >
+      <div className="loading">&nbsp;</div>
       {props.movieCardInfo && props.movieCardInfo.poster_path &&
         <img src={"https://image.tmdb.org/t/p/w300/" + props.movieCardInfo.poster_path.slice(1)}/>
       }

@@ -114,6 +114,7 @@ class AppContainer extends Component {
             cardElement.className = 'card disappearing';
           }
         });
+        document.getElementsByClassName('no-choice')[0].className = 'no-choice disappearing';
         setTimeout(()=>{
           this.actions['set' + type](value);
           this.actions.setNextStep();
@@ -132,17 +133,25 @@ class AppContainer extends Component {
         cardElement.className = 'card disappearing';
       }
     });
+    document.getElementsByClassName('no-choice')[0].className = 'no-choice disappearing';
     setTimeout(()=>{
       this.actions.setNextStep();
     }, 500);
   }
 
   movieCardClicked(value, event) {
+    let currentClass = event.currentTarget.className;
     const visibleMovieCards = document.getElementsByClassName('movie-card');
     [].map.call(visibleMovieCards, (cardElement)=>{
-      cardElement.className = 'movie-card inactive';
+      if (cardElement.className.indexOf(' inactive') === -1) {
+        cardElement.className += ' inactive';
+      }
     });
-    event.currentTarget.className = 'movie-card active';
+    if (currentClass.indexOf(' active') === -1) {
+      currentClass += ' active';
+      currentClass = currentClass.replace(' inactive', '');
+    }
+    event.currentTarget.className = currentClass;
     this.setState({
       currentMovie: value
     });
@@ -151,7 +160,8 @@ class AppContainer extends Component {
   resetCurrentMovie() {
     const visibleMovieCards = document.getElementsByClassName('movie-card');
     [].map.call(visibleMovieCards, (cardElement)=>{
-      cardElement.className = 'movie-card';
+      cardElement.className = cardElement.className.replace(' inactive', '');
+      cardElement.className = cardElement.className.replace(' active', '');
     });
     this.setState({
       currentMovie: null
@@ -213,20 +223,24 @@ class AppContainer extends Component {
       searchParams.push(this.props.mainState.fame);
     }
 
+    let currentMovieYear = '';
+
+    if (currentMovie && currentMovie.release_date) {
+      currentMovieYear = new Date(currentMovie.release_date).getFullYear();
+    }
+
     return (
       <div className="app-container">
 
         <div className="card-holder">
 
-          {!_.isEmpty(searchParams) &&
-            <div className="search-params">
-              {_.map(searchParams, (searchParamItem, index) => {
-                return (
-                  <li key={index}>{this.russianParams(searchParamItem)}</li>
-                );
-              })}
-            </div>
-          }
+          <div className={"search-params" + (_.isEmpty(searchParams) ? ' empty' : '')}>
+            {!_.isEmpty(searchParams) ? _.map(searchParams, (searchParamItem, index) => {
+              return (
+                <li key={index}>{this.russianParams(searchParamItem)}</li>
+              );
+            }) : <div>&nbsp;</div>}
+          </div>
 
           <div className="shelf">&nbsp;</div>
 
@@ -311,9 +325,19 @@ class AppContainer extends Component {
           <div>
             {!_.isEmpty(currentMovie) &&
               <div className="movie-overview">
-                <div className="close-icon" onClick={this.resetCurrentMovie.bind(this)}>&#10005;</div>
-                <h3>{currentMovie.title || currentMovie.original_title || 'Название неизвестно'}</h3>
-                <p>{currentMovie.overview || 'Описания, к сожалению, нет.'}</p>
+                <div
+                  className="close-icon"
+                  onClick={this.resetCurrentMovie.bind(this)}>
+                  &#10005;
+                </div>
+                <h3>
+                  {(currentMovie.title || currentMovie.original_title)
+                    ? (currentMovie.title || currentMovie.original_title) + ' (' + currentMovieYear + ')'
+                    : 'Название неизвестно'}
+                  </h3>
+                <p>
+                  {currentMovie.overview || 'Описания, к сожалению, нет.'}
+                  </p>
               </div>
             }
             {_.map(randomMoviesList.slice(0,3), (movieInfo, index)=>{

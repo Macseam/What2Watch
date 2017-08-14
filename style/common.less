@@ -22,6 +22,44 @@ html, body {
   padding: 0;
 }
 
+.keyframes(card-appear;{
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+});
+
+.keyframes(button-appear;{
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+});
+
+.keyframes(card-disappear;{
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+});
+
+.keyframes(spin;{
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+});
+
 #app {
   height: 100%;
 }
@@ -83,9 +121,17 @@ html, body {
   box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2);
   border-top: 1px solid rgba(255,255,255,0.4);
   transition: background 0.3s ease;
+  .animation(button-appear 1s ease 1);
   &:hover {
     background: #0097a7;
     transition: background 0.3s ease;
+  }
+  &:focus {
+    background: red;
+  }
+  &.disappearing {
+    opacity: 0;
+    .animation(card-disappear 0.5s ease 1);
   }
 }
 
@@ -101,16 +147,6 @@ html, body {
   perspective: 1000px;
   z-index: 10;
   transition: bottom 0.5s ease;
-  .keyframes(card-appear;{
-    0% {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  });
   .animation(card-appear 1s ease 1);
   &:hover {
     bottom: 30px;
@@ -140,14 +176,6 @@ html, body {
   }
   &.disappearing {
     opacity: 0;
-    .keyframes(card-disappear;{
-      0% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-      }
-    });
     .animation(card-disappear 0.5s ease 1);
   }
   &-face {
@@ -263,6 +291,20 @@ html, body {
   height: 260px;
   z-index: 10;
   transition: bottom 0.5s ease, opacity 0.5s ease;
+  .loading {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    top: 45%;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    border: .25rem solid rgba(255,255,255,0.2);
+    border-top-color: #ffffff;
+    z-index: -1;
+    animation: spin 1s infinite linear;
+  }
   .movie-title-wo-picture {
     text-align: center;
     padding: 10px;
@@ -277,6 +319,9 @@ html, body {
   }
   &.no-picture {
     background: transparent url('../images/wild_oliva.png');
+    .loading {
+      display: none;
+    }
   }
   &.empty {
     border: 0;
@@ -284,16 +329,6 @@ html, body {
       display: none;
     }
   }
-  .keyframes(card-appear;{
-    0% {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  });
   .animation(card-appear 1s ease 1);
   &:not(.inactive):hover, &.active {
     bottom: 30px;
@@ -362,15 +397,21 @@ html, body {
   width: 80%;
   margin: 0 auto;
   opacity: 0.8;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #ffb74d;
+  &.empty {
+    div {
+      border-bottom: 3px transparent solid;
+      padding-bottom: 4px;
+    }
+  }
   li {
     display: inline-block;
-    color: #ffb74d;
     border-bottom: 3px #ffa726 solid;
     margin: 0 1%;
-    text-transform: uppercase;
     padding-bottom: 4px;
-    font-family: 'Roboto Condensed', sans-serif;
-    font-size: 10px;
     &:nth-last-child(1), &:nth-last-child(1) ~li {
       width: 100%;
     }
