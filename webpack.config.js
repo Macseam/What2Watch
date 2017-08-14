@@ -1,6 +1,7 @@
 let webpack = require('webpack');
 let path = require('path');
 
+const HelloWorldPlugin = require('./homebrew-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractLess = new ExtractTextPlugin({
   filename: "[name].[contenthash].css",
@@ -186,6 +187,7 @@ module.exports = {
     }),
   ] : [
     extractLess,
+    //new HelloWorldPlugin({styleDir: path.resolve(__dirname, 'style')}),
     new webpack.optimize.CommonsChunkPlugin({
       name: "vendors",
       children: true,

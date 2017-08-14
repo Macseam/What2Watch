@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import moment from 'moment';
 
 import { bindActionCreators } from 'redux';
 import * as mainActions from '../actions/mainActions';
@@ -71,13 +72,13 @@ class AppContainer extends Component {
 
     switch (nextProps.mainState.date) {
       case 'old':
-        params['release_date.lte'] = '2015-01-01';
+        params['release_date.lte'] = moment().subtract(2.5, 'years').format('YYYY-MM-DD');
         break;
       case 'new':
-        params['release_date.gte'] = '2015-01-01';
+        params['release_date.gte'] = moment().subtract(2.5, 'years').format('YYYY-MM-DD');
         break;
       case 'fresh':
-        params['release_date.gte'] = '2017-01-01';
+        params['release_date.gte'] = moment().subtract(1, 'years').format('YYYY-MM-DD');
         break;
       default:
         break;
